@@ -1,0 +1,9 @@
+{
+    "japanese-font": {
+        "normal": "japanese_font_normal_7e4fee3b7037002a0b183d9c21c228b1"
+    },
+    "jp-gothic": {
+        "normal": "\/var\/www\/html\/storage\/fonts\/jp_gothic_normal_64c0ed6ddbf1e1b3b8384e5216fb2e92",
+        "bold": "jp_gothic_bold_64c0ed6ddbf1e1b3b8384e5216fb2e92"
+    }
+}
