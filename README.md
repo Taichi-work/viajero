@@ -1,59 +1,156 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Viajero（旅程表アプリ）
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Viajero は、旅行計画（Trip）と旅程（Itinerary）を管理できる Web アプリケーションです。
+Laravel の MVC 構造・CRUD 処理・認証・リレーション設計を意識して開発しています。
 
-## About Laravel
+---
+## 概要
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+旅行ごとに旅程（行動予定）を時系列で管理
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+時刻を入力すると、morning / noon / evening に自動分類
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+旅程の作成・編集・削除・並び替えが可能
 
-## Learning Laravel
+ログインユーザーごとにデータを安全に管理
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
+### 学習目的
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Laravel の CRUD / MVC / ルーティング / 認証を実践的に理解
 
-## Laravel Sponsors
+Docker + Sail を使った開発環境構築に慣れる
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Blade + Tailwind CSS による UI 実装
 
-### Premium Partners
+---
+## 技術スタック
+### 言語
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+PHP 8.x
 
-## Contributing
+HTML / CSS
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+JavaScript（最小限）
 
-## Code of Conduct
+フレームワーク / ライブラリ
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Laravel 10
 
-## Security Vulnerabilities
+Laravel Breeze（認証）
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Blade（テンプレートエンジン）
 
-## License
+Tailwind CSS（UI）
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+### 開発環境・ツール
+
+Docker
+
+Laravel Sail
+
+MySQL
+
+Git / GitHub
+
+---
+## アーキテクチャ（CRUD / MVC 対応表）
+### MVC 構成
+役割	対象
+Model	Trip / Itinerary
+View	Blade（trips/, itineraries/）
+Controller	TripController / ItineraryController
+### CRUD 対応箇所
+Trip（旅行）
+操作	対応
+Create	trips.create / trips.store
+Read	trips.index / trips.show
+Update	trips.edit / trips.update
+Delete	trips.destroy
+### Itinerary（旅程）
+操作	対応
+Create	itineraries.create / itineraries.store
+Read	trips.show 内で一覧表示
+Update	itineraries.edit / itineraries.update
+Delete	itineraries.destroy
+
+---
+## こだわって実装した機能
+① 時刻による時間帯自動分類
+
+時刻を入力すると以下のように自動分類
+
+morning：05:00〜10:59
+
+noon：11:00〜16:59
+
+evening：17:00〜23:59
+
+データは壊さず、表示ロジックのみで制御
+
+② 15分刻みの時刻入力
+<input type="time" step="900">
+
+
+UX を意識し、不要な細かい時間指定を防止
+
+③ 編集画面で既存データを保持
+
+日付・時刻・内容が編集画面で事前入力された状態で表示
+
+「何を修正しているか」が一目で分かる UI
+
+④ 認証・認可（403 / 404 制御）
+
+自分以外の Trip / Itinerary にはアクセス不可
+
+Controller でユーザー確認を実装
+
+abort_if($itinerary->trip->user_id !== Auth::id(), 403);
+
+---
+## 使い方
+
+新規登録 or ログイン
+
+旅行（Trip）を作成
+
+旅程（Itinerary）を追加
+
+時刻・メモ・移動情報を管理
+
+編集・削除・並び替えで調整
+
+---
+## セットアップ方法（コピペOK）
+1. リポジトリをクローン
+git clone https://github.com/yourname/viajero.git
+cd viajero
+
+2. 環境変数を設定
+cp .env.example .env
+
+3. Docker（Sail）起動
+./vendor/bin/sail up -d
+
+4. 依存関係 & 初期設定
+./vendor/bin/sail composer install
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run build
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate
+
+5. アクセス
+http://localhost
+
+---
+## 今後の改善予定（Optional）
+
+Google Maps API 連携
+
+旅程のドラッグ & ドロップ並び替え
+
+スマホ対応 UI の強化
+
+共有機能（Read Only）
